@@ -182,7 +182,7 @@ export default function Navbar() {
 
     async function walletConn() {
         setModal1(!modal1);
-        await authenticate({signingMessage:"Screen Sign In"});
+        await authenticate({signingMessage:"Endaoment Sign In"});
         enableWeb3();
         try{
             let addr = user.get('ethAddress');
@@ -195,7 +195,7 @@ export default function Navbar() {
         
     async function walletConnect() {
         setModal1(!modal1);
-        await authenticate({ provider: "walletconnect", signingMessage:"Lore Sign In"});
+        await authenticate({ provider: "walletconnect", signingMessage:"Endaoment Sign In"});
         enableWeb3({ provider: "walletconnect" });
         if (isAuthenticated && user ) {
             window.location.reload();

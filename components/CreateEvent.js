@@ -3,7 +3,7 @@ import Router from 'next/router';
 import axios from 'axios';
 import { MDBContainer, MDBIcon, MDBRow, MDBCol } from "mdbreact";
 import { 
-    useMoralis
+    useMoralis, useMoralisFile, useWeb3Transfer
 } from "react-moralis";
 import LoadingSpinner from "./LoadingSpinner";
 import bg from "../public/assets/image/bg.png";
@@ -24,6 +24,8 @@ const CreateEvent = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false);
     const [progress, setProgress] = useState(0);
+    const { saveFile, moralisFile } = useMoralisFile();
+    const [imageHash, setImageHash] = useState(null);
 
     let yesterday = moment().subtract( 1, 'day' );
     let today = moment().subtract( 0, 'day' );
@@ -122,6 +124,9 @@ const CreateEvent = () => {
     }
 
     const handleSubmit = (e, data) => {
+        let fileIpfs = await saveFile(data.name, data, { saveIPFS: true });
+        console.log(fileIpfs);
+        setImageHash(_hash);
         e.preventDefault();
         if (
             !e.target.eventName.value || !e.target.eventDesc.value || !date 
@@ -176,60 +181,6 @@ const CreateEvent = () => {
                         console.log('error', error)
                     }
                 );
-
-            /*
-            axios.put(
-                "https://v1.nocodeapi.com/kuzi/google_sheets/lKGduWvhRJinhnlS?tabId=Sheet1", 
-                JSON.stringify(
-                [    
-                    [
-                        // 4,
-                        e.target.eventName.value,
-                        e.target.eventDesc.value,
-                        e.target.eventObj.value,
-                        unix_timestamp,
-                        unix_timestamp1,
-                        e.target.eventBudget.value,
-                        0,
-                        e.target.eventLink.value,
-                        imageUrl,
-                        // user.get('ethAddress')
-                    ]
-                ]),
-                    // JSON.stringify(
-                    //     [
-                    //         [
-                    //             3,
-                    //             e.target.eventName.value,
-                    //             e.target.eventDesc.value,
-                    //             e.target.eventObj.value,
-                    //             unix_timestamp,
-                    //             unix_timestamp1,
-                    //             e.target.eventBudget.value,
-                    //             0,
-                    //             e.target.eventLink.value,
-                    //             imageUrl,
-                    //             user.get('ethAddress')
-                    //         ]
-                    //     ]
-                    // ),
-                {
-                    params: {
-                        tabId: "Sheet1"
-                    }
-                },
-                {headers: { 'content-type': 'application/json' }},
-            )
-            .then(result => {
-                console.log(result);
-                setLoading(false);
-                setErrorMessage(result.data.message);
-            })
-            .catch(error => {
-                setLoading(false);
-                // setErrorMessage(error);
-                console.log(error);
-            });*/
         }
     }
     
